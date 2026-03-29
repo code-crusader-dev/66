@@ -1,5 +1,6 @@
 import os
 import socket
+import tempfile
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app.db import db
@@ -22,7 +23,8 @@ if not database_uri:
         socket.getaddrinfo('db', 3306)
         database_uri = 'mysql+pymysql://root:hrs_admin_router@db/database'
     except OSError:
-        database_uri = 'sqlite:///local.db'
+        db_path = os.path.join(tempfile.gettempdir(), 'local.db')
+        database_uri = f'sqlite:///{db_path}'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
